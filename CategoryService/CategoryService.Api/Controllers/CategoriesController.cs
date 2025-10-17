@@ -1,6 +1,7 @@
 ﻿using CategoryService.Core.Interfaces;
 using CategoryService.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace CategoryService.Controllers;
 
