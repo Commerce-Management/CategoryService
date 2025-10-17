@@ -10,4 +10,11 @@
       <ProjectReference Include="..\CategoryService.Shared\CategoryService.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="15.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+        <PackageReference Include="FluentValidation" Version="11.10.0" />
+    </ItemGroup>
+
 </Project>

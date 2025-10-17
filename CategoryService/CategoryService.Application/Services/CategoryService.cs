@@ -1,4 +1,5 @@
-﻿using CategoryService.Core.Entities;
+﻿using AutoMapper;
+using CategoryService.Core.Entities;
 using CategoryService.Core.Interfaces;
 using CategoryService.Infrastructure.Interfaces.Base;
 using CategoryService.Infrastructure.Interfaces.Entities;

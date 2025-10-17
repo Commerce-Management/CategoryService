@@ -1,6 +1,7 @@
 ﻿using CategoryService.Core.Entities;
 using CategoryService.Infrastructure.Context;
 using CategoryService.Infrastructure.Interfaces.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace CategoryService.Infrastructure.Repositories.Base;
 
