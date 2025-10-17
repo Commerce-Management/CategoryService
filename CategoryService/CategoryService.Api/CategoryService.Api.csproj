@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+        <RootNamespace>CategoryService</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +18,16 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CategoryService.Application\CategoryService.Application.csproj" />
+      <ProjectReference Include="..\CategoryService.Core\CategoryService.Core.csproj" />
+      <ProjectReference Include="..\CategoryService.Infrastructure\CategoryService.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Middlewares\" />
     </ItemGroup>
 
 </Project>
