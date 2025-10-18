@@ -1,21 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CategoryService.Shared.Validation;
+﻿using CategoryService.Shared.Validation;
 using Microsoft.AspNetCore.Http;
 
 namespace CategoryService.Shared.Dtos;
 
-public record CreateCategoryDto(
-    [Required]
-    string Name,
+public record UpdateCategoryDto(
+    string? Name = null,
     string? Description = null,
     Guid? ParentCategoryId = null,
     string? Slug = null,
-    int SortOrder = 0,
+    int? SortOrder = null,
     
     [AllowedExtensions([".jpg", ".png"])]
     [MaxFileSize(10 * 1024 * 1024)]
     IFormFile? ImageUrl = null,
     
-    bool IsActive = true,
-    bool IsVisible = true
+    bool? ClearImageUrl = null,
+    bool? IsActive = null,
+    bool? IsVisible = null
 );
