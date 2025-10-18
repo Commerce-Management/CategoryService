@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using CategoryService.Application.Services;
 using CategoryService.Core.Interfaces;
 using CategoryService.Core.Profiles;
 using CategoryService.Infrastructure.Context;
@@ -151,6 +152,9 @@ builder.Services.AddApiVersioning(options => { options.ReportApiVersions = true;
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICategoryService, CategoryService.Application.Services.CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryImageService, CategoryImageService>();
+
+
 
 // вариант A — передать пустой делегат + типы профилей
 builder.Services.AddAutoMapper(cfg => { }, typeof(CategoryProfile));

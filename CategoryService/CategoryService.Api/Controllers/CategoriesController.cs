@@ -68,7 +68,7 @@ public class CategoriesController(ICategoryService categoryService) : Controller
 
     [HttpPost]
     // [Authorize(Roles = "AppAdmin")]
-    public async Task<ActionResult<GetCategoryDto>> CreateCategory([FromBody] CreateCategoryDto categoryDto)
+    public async Task<ActionResult<GetCategoryDto>> CreateCategory([FromForm] CreateCategoryDto categoryDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(new { Error = "Model not valid" });
@@ -92,9 +92,9 @@ public class CategoriesController(ICategoryService categoryService) : Controller
         }
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPatch("{id:guid}")]
     // [Authorize(Roles = "AppAdmin")]
-    public async Task<ActionResult> UpdateCategory(Guid id, CreateCategoryDto categoryDto)
+    public async Task<ActionResult> UpdateCategory(Guid id, UpdateCategoryDto categoryDto)
     {
         if (!ModelState.IsValid)
             return BadRequest("Model not valid");
