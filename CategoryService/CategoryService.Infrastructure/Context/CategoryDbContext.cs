@@ -21,7 +21,6 @@ public class CategoryDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CategoryDbContext).Assembly);
     }
     
-    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
