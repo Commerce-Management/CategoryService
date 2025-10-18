@@ -10,5 +10,9 @@ public class CategoryProfile : Profile
     {
         CreateMap<CreateCategoryDto,Category>();
         CreateMap<Category, GetCategoryDto>();
+        CreateMap<UpdateCategoryDto, Category>()
+            .ForMember(d => d.ImageUrl, opt => opt.Ignore())
+            .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+
     }
 }
