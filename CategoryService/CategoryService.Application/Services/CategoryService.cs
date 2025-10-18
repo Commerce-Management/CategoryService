@@ -10,6 +10,7 @@ namespace CategoryService.Application.Services;
 public class CategoryService(
     ICategoryRepository categoryRepository,
     IMapper mapper, 
+    ICategoryImageService categoryImageService,
     IUnitOfWork unitOfWork) : ICategoryService
 {
     public async Task<IEnumerable<GetCategoryDto>> GetAllCategories() =>
@@ -27,6 +28,16 @@ public class CategoryService(
         {
             var categoryEntity = mapper.Map<Category>(categoryDto);
 
+            if (categoryDto.ImageUrl is {Length: > 0})
+            {
+                var url = await categoryImageService.UploadCategoryImageAsync(categoryDto.ImageUrl);
+                categoryEntity.ImageUrl = url;  
+            }
+            else
+            {
+                categoryEntity.ImageUrl = null;  
+            }
+
             await unitOfWork.BeginTransactionAsync();
 
             var category = await categoryRepository.InsertAsync(categoryEntity);
@@ -43,12 +54,22 @@ public class CategoryService(
         }
     }
 
-    public async Task<bool> UpdateCategory(Guid id, CreateCategoryDto categoryDto)
+    public async Task<bool> UpdateCategory(Guid id, UpdateCategoryDto categoryDto)
     {
         var category = await categoryRepository.GetCategoryByIdAsync(id);
         
         if (category is null)
             return false;
+
+        if (categoryDto.ImageUrl != null && categoryDto.ImageUrl.Length > 0)
+        {
+            var url = await categoryImageService.UploadCategoryImageAsync(categoryDto.ImageUrl);
+            category.ImageUrl = url;
+        }
+        else if (categoryDto.ClearImageUrl == true)
+        {
+            category.ImageUrl = null;
+        }
         
         mapper.Map(categoryDto, category);
         categoryRepository.Update(category);
