@@ -1,4 +1,7 @@
-﻿namespace CategoryService.Core.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace CategoryService.Core.Entities;
 
 public class Category : IEntity
 {

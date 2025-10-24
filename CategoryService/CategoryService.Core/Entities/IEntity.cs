@@ -1,4 +1,6 @@
-﻿namespace CategoryService.Core.Entities;
+﻿using System;
+
+namespace CategoryService.Core.Entities;
 
 public interface IEntity
 {
