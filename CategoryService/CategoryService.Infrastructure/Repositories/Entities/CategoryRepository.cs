@@ -18,6 +18,37 @@ public class CategoryRepository(CategoryDbContext context) : Repository<Category
         await GetCategoryQuery()
             .SingleOrDefaultAsync(c => c.Id == id);
 
+    public async Task<Category?> GetDetailCategoryById(Guid id)
+    {
+        var category = await Entities
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (category == null)
+            return null;
+
+        var current = category;
+        while (current.ParentCategoryId.HasValue)
+        {
+            var parent = await Entities
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == current.ParentCategoryId.Value);
+
+            if (parent == null)
+                break; 
+
+            current.ParentCategory = parent;
+
+            current = parent;
+        }
+
+        category.Children = await Entities.Where(c => c.ParentCategoryId == category.Id).AsNoTracking().ToListAsync();
+
+        return category;
+    }
+
+    
+
     public async Task<IEnumerable<Category>> GetAllCategoriesAsync() =>
         await GetCategoryQuery()
             .OrderBy(category => category.SortOrder)
