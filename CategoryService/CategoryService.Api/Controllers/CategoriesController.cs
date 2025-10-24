@@ -1,12 +1,14 @@
-﻿using CategoryService.Core.Interfaces;
+﻿using Asp.Versioning;
+using CategoryService.Core.Interfaces;
 using CategoryService.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace CategoryService.Controllers;
 
+[ApiVersion("1.0")]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class CategoriesController(ICategoryService categoryService) : ControllerBase
 {
 

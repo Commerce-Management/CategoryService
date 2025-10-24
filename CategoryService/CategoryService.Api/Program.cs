@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using CategoryService.Application.Services;
@@ -123,7 +124,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CustomerAndOwner", policy => policy.RequireClaim(ClaimTypes.Role, "ShopOwner", "ShopCustomer"));
 });
 
-
+builder.Services.AddGrpc();
 builder.Services.AddControllers();
 
 
@@ -136,6 +137,21 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 
 builder.Services.AddHttpClient("MyClient");
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    
+    options.Listen(IPAddress.Any, 5293, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+    });
+    
+
+    options.Listen(IPAddress.Any, 5002, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2; 
+    });
+}); 
 
 
 builder.Services.AddApiVersioning(options => { options.ReportApiVersions = true; }
@@ -189,6 +205,8 @@ app.UseCookiePolicy();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGrpcService<CategoryService.Infrastructure.gRPC.GrpcCategoryService>();
 app.MapControllers();
 
 
