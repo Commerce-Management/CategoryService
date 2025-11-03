@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>CategoryService</RootNamespace>
     </PropertyGroup>
 
@@ -25,12 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\CategoryService.Application\CategoryService.Application.csproj" />
       <ProjectReference Include="..\CategoryService.Core\CategoryService.Core.csproj" />
       <ProjectReference Include="..\CategoryService.Infrastructure\CategoryService.Infrastructure.csproj" />
@@ -38,6 +32,12 @@
 
     <ItemGroup>
       <Folder Include="Middlewares\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
