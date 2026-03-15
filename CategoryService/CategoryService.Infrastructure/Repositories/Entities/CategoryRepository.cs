@@ -58,4 +58,13 @@ public class CategoryRepository(CategoryDbContext context) : Repository<Category
     public async Task<Category?> GetCategoryByNameAsync(string name) =>
         await GetCategoryQuery()
             .SingleOrDefaultAsync(c => c.Name == name);
+    
+    public async Task<List<Category>> GetCategoriesByIdsAsync(List<Guid> ids)
+    {
+        return await Entities
+            .Where(c => ids.Contains(c.Id))
+            .AsNoTracking()
+            .ToListAsync();
+    }
+    
 }

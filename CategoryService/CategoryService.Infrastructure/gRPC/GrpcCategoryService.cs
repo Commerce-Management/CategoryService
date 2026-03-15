@@ -28,7 +28,7 @@ public class GrpcCategoryService : CategoryService.Shared.Protos.GrpcCategorySer
 
         try
         {
-            // Получаем детальную категорию (саму сущность)
+           
             var category = await _categoryRepository.GetDetailCategoryById(categoryId);
             if (category == null)
             {
@@ -42,7 +42,7 @@ public class GrpcCategoryService : CategoryService.Shared.Protos.GrpcCategorySer
             if (!category.IsVisible)
                 throw new RpcException(new Status(StatusCode.FailedPrecondition, "Category is not visible"));
 
-            // map main dto
+        
             var dto = new CategoryDto
             {
                 Id = category.Id.ToString(),
@@ -56,11 +56,10 @@ public class GrpcCategoryService : CategoryService.Shared.Protos.GrpcCategorySer
                 IsVisible = category.IsVisible
             };
 
-            // parent (immediate)
+       
             if (category.ParentCategoryId.HasValue)
             {
-                // если GetDetailCategoryById уже вернул ParentCategory populated, можно использовать его;
-                // иначе загрузим одного родителя (легковесный запрос)
+         
                 var parent = category.ParentCategory ??
                              await _categoryRepository.GetByIdAsync(category.ParentCategoryId.Value);
                 if (parent != null)
@@ -74,7 +73,7 @@ public class GrpcCategoryService : CategoryService.Shared.Protos.GrpcCategorySer
                 }
             }
 
-            // children (immediate)
+      
             if (category.Children != null && category.Children.Any())
             {
                 foreach (var child in category.Children)
@@ -88,8 +87,7 @@ public class GrpcCategoryService : CategoryService.Shared.Protos.GrpcCategorySer
                 }
             }
 
-            // full parents chain: от ближайшего вверх до корня.
-            // Мы хотим вернуть от корня -> ... -> nearest parent, поэтому соберём и затем развернём.
+    
             var parentsStack = new List<CategoryShortDto>();
             var curParentId = category.ParentCategoryId;
 
@@ -105,16 +103,16 @@ public class GrpcCategoryService : CategoryService.Shared.Protos.GrpcCategorySer
                     Level = p.Level
                 });
 
-                // идём на уровень выше
+              
                 curParentId = p.ParentCategoryId;
             }
 
-            // сейчас parentsStack = [ nearestParent, parentOfParent, ..., root ] — перевернём, чтобы root→...→nearestParent
+           
             parentsStack.Reverse();
             foreach (var parentDto in parentsStack)
                 dto.Parents.Add(parentDto);
 
-            // return
+       
             return new GetCategoryByIdResponse { Category = dto };
         }
         catch (RpcException)
@@ -126,5 +124,31 @@ public class GrpcCategoryService : CategoryService.Shared.Protos.GrpcCategorySer
             _logger.LogError(ex, "Error retrieving category {CategoryId}", categoryId);
             throw new RpcException(new Status(StatusCode.Internal, "An error occurred while processing your request"));
         }
+    }
+    
+    public override async Task<GetCategoriesByIdsResponse> GetCategoriesByIds(
+        GetCategoriesByIdsRequest request,
+        ServerCallContext context)
+    {
+        var categoryIds = request.CategoryIds
+            .Where(id => Guid.TryParse(id, out _))
+            .Select(Guid.Parse)
+            .ToList();
+
+        var categories = await _categoryRepository.GetCategoriesByIdsAsync(categoryIds);
+
+        var response = new GetCategoriesByIdsResponse();
+    
+        foreach (var category in categories)
+        {
+            response.Categories.Add(new CategorySimple
+            {
+                Id = category.Id.ToString(),
+                Name = category.Name,
+                Level = category.Level
+            });
+        }
+
+        return response;
     }
 }

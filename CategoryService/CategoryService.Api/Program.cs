@@ -172,7 +172,7 @@ builder.Services.AddScoped<ICategoryImageService, CategoryImageService>();
 
 
 
-// вариант A — передать пустой делегат + типы профилей
+
 builder.Services.AddAutoMapper(cfg => { }, typeof(CategoryProfile));
 
 

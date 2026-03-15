@@ -47,14 +47,14 @@ public class CategoryConfig : IEntityTypeConfiguration<Category>
         builder.Property(e => e.SortOrder)
             .HasDefaultValue(0);
 
-        // Индексы
+        
         builder.HasIndex(e => e.ParentCategoryId).HasDatabaseName("IX_Categories_ParentCategoryId");
         builder.HasIndex(e => e.Slug).HasDatabaseName("IX_Categories_Slug");
         builder.HasIndex(e => new { e.ParentCategoryId, e.Slug })
             .IsUnique()
             .HasDatabaseName("UX_Categories_Parent_Slug");
 
-        // Навигация: Children <-> ParentCategory
+       
         builder.HasMany(e => e.Children)
             .WithOne(e => e.ParentCategory)
             .HasForeignKey(e => e.ParentCategoryId)

@@ -9,4 +9,6 @@ public interface ICategoryRepository : IRepository<Category>
     public Task<IEnumerable<Category>> GetAllCategoriesAsync();
     public Task<Category?> GetDetailCategoryById(Guid id);
     public Task<Category?> GetCategoryByNameAsync(string name);
+
+    public Task<List<Category>> GetCategoriesByIdsAsync(List<Guid> ids);
 }

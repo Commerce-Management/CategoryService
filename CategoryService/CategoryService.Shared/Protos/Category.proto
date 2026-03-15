@@ -4,6 +4,7 @@ package category;
 
 service CategoryService {
   rpc GetCategoryById(GetCategoryByIdRequest) returns (GetCategoryByIdResponse);
+  rpc GetCategoriesByIds(GetCategoriesByIdsRequest) returns (GetCategoriesByIdsResponse); // ← НОВОЕ
 }
 
 message GetCategoryByIdRequest { string category_id = 1; }
@@ -27,6 +28,21 @@ message CategoryDto {
 }
 
 message CategoryShortDto {
+  string id = 1;
+  string name = 2;
+  int32 level = 3;
+}
+
+
+message GetCategoriesByIdsRequest {
+  repeated string category_ids = 1;
+}
+
+message GetCategoriesByIdsResponse {
+  repeated CategorySimple categories = 1;
+}
+
+message CategorySimple {
   string id = 1;
   string name = 2;
   int32 level = 3;
